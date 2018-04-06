@@ -8,7 +8,7 @@ except ImportError:
 
 dist = setup(
     name='im_futuregcsfilesharded',
-    version='0.1.0',
+    version='0.1.1',
     description='future based gcs file sharding map functions, for traversing gcs text files at any scale, for Google App Engine, Python standard environment',
     author='Emlyn O\'Regan',
     author_email='emlynoregan@gmail.com',

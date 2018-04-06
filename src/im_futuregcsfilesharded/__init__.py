@@ -15,15 +15,18 @@ def futuregcsfileshardedpagemap(pagemapf=None, gcspath=None, pagesize=100, onsuc
             with gcs.open(gcspath) as gcsfile:
                 page, ranges = hwalk(gcsfile, pagesize, 2, startbyte, endbyte) 
 
+            lweightUsed = 0
             if pagemapf:
                 lonallchildsuccessf = GenerateOnAllChildSuccess(futurekey, linitialresult, loncombineresultsf)
                 taskkwargs["futurename"] = "pagemap %s of %s,%s" % (len(page), startbyte, endbyte)
-                future(pagemapf, parentkey=futurekey, onallchildsuccessf=lonallchildsuccessf, weight = len(page), **taskkwargs)(page)
+                lweightUsed = weight * 0.05
+                future(pagemapf, parentkey=futurekey, onallchildsuccessf=lonallchildsuccessf, weight = lweightUsed, **taskkwargs)(page)
             else:
-                setlocalprogress(futurekey, len(page))
+                pass
+                #setlocalprogress(futurekey, len(page))
 
             if ranges:
-                newweight = (weight - len(page)) / len(ranges) if not weight is None else None 
+                newweight = (weight - lweightUsed) / len(ranges) if weight else None
                 for arange in ranges:
                     taskkwargs["futurename"] = "shard %s" % (arange)
 
